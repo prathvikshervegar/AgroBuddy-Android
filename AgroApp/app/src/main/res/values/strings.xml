@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Agro Buddy</string>
+    <string name="user">Full Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="forgot_password">FORGOT PASSWORD?</string>
+    <string name="new_user_register_now">New User? Register Here</string>
+    <string name="existing_user_login_here">Existing User? Login Here</string>
+</resources>
