@@ -4,11 +4,13 @@ public class Member {
 
     private String name;
     private String email;
+    private String mobile;
     private String usertype;
 
-    public Member(String name,String email,String usertype){
+    public Member(String name,String email,String mobile,String usertype){
         this.name=name;
         this.email=email;
+        this.mobile=mobile;
         this.usertype=usertype;
     }
 
@@ -22,5 +24,9 @@ public class Member {
 
     public String getUsertype() {
         return usertype;
+    }
+
+    public String getMobile() {
+        return mobile;
     }
 }

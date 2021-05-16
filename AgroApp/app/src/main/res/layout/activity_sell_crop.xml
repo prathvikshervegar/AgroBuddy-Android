@@ -6,37 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".SellCropActivity">
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/custom_appbar" />
-
-    <TextView
-        android:id="@+id/appbartitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/include2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="@+id/include2"
-        app:layout_constraintTop_toTopOf="@+id/include2" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="24dp"
         android:text="Sell Crop"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24000001" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/sellcropname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -47,50 +31,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
+    <Spinner
+        android:id="@+id/sellcroptype"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Enter Quantity(in quintal)"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        android:entries="@array/crop_type"
+        app:layout_constraintEnd_toEndOf="@+id/sellcropname"
+        app:layout_constraintStart_toStartOf="@+id/sellcropname"
+        app:layout_constraintTop_toBottomOf="@+id/sellcropname" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/sellcropquantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Enter Quantity(in quintal)"
+        android:inputType="number|numberDecimal"
+        app:layout_constraintEnd_toEndOf="@+id/sellcroptype"
+        app:layout_constraintStart_toStartOf="@+id/sellcroptype"
+        app:layout_constraintTop_toBottomOf="@+id/sellcroptype" />
+
+    <EditText
+        android:id="@+id/sellcropprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Enter Price(per kg)"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        android:inputType="number|numberDecimal"
+        app:layout_constraintEnd_toEndOf="@+id/sellcropquantity"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/sellcropquantity"
+        app:layout_constraintTop_toBottomOf="@+id/sellcropquantity" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName4"
+    <Button
+        android:id="@+id/sellcropsubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Contact no."
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/sellcropprice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

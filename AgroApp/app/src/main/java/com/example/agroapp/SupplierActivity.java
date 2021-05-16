@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SupplierActivity extends AppCompatActivity {
 
     private TextView t1;
-    private Button b1,logout;
+    private LinearLayout l1, l2, logout;
 
     private long backPressedTime;
     private Toast backToast;
@@ -31,8 +32,9 @@ public class SupplierActivity extends AppCompatActivity {
         setContentView(R.layout.activity_supplier);
 
         t1=(TextView)findViewById(R.id.welcomesupplier);
-        b1=(Button)findViewById(R.id.buycropbtn);
-        logout=(Button)findViewById(R.id.sellerlogout);
+        l1=(LinearLayout) findViewById(R.id.buycrop);
+        l2=(LinearLayout) findViewById(R.id.tradehistorysupplier);
+        logout=(LinearLayout) findViewById(R.id.supplierlogout);
 
         DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         dbRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -48,10 +50,17 @@ public class SupplierActivity extends AppCompatActivity {
             }
         });
 
-        b1.setOnClickListener(new View.OnClickListener() {
+        l1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SupplierActivity.this,BuyCropActivity.class));
+            }
+        });
+
+        l2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SupplierActivity.this,SupplierTradeActivity.class));
             }
         });
 
@@ -59,6 +68,7 @@ public class SupplierActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                Toast.makeText(SupplierActivity.this,"Logged out successfully",Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(SupplierActivity.this,MainActivity.class));
                 finish();
             }

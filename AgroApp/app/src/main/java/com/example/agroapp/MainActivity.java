@@ -139,16 +139,32 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText resetEmail = new EditText(v.getContext());
                 AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password?");
-                passwordResetDialog.setMessage("Enter your Email to recieve reset link");
-                passwordResetDialog.setView(resetEmail);
-                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                passwordResetDialog.setCancelable(false)
+                                    .setTitle("Reset Password?")
+                                    .setMessage("Enter your Email to recieve reset link")
+                                    .setView(resetEmail)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ///
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog psd = passwordResetDialog.create();
+                psd.show();
+                psd.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         String mail=resetEmail.getText().toString();
                         if(mail.isEmpty())
                         {
-                            ///
+                            resetEmail.setError("Email cannot be empty");
+                            resetEmail.requestFocus();
                         }
                         else{
                             mAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -162,17 +178,10 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"Error! Reset link not sent"+e.getMessage(),Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            psd.dismiss();
                         }
                     }
                 });
-                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-                passwordResetDialog.create().show();
             }
         });
 

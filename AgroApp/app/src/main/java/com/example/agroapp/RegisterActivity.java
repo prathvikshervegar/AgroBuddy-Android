@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
 
-    private EditText e1, e2, e3;
+    private EditText e1, e2, e3, e4;
     private RadioGroup rg;
     private RadioButton r1,r2;
     private RadioButton radioSelected;
@@ -52,7 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         e1 = (EditText) findViewById(R.id.registeruser);
         e2 = (EditText) findViewById(R.id.registeremail);
-        e3 = (EditText) findViewById(R.id.registerpass);
+        e3 = (EditText) findViewById(R.id.registermobile);
+        e4 = (EditText) findViewById(R.id.registerpass);
         rg = (RadioGroup) findViewById(R.id.radiogroup);
         r1 = (RadioButton) findViewById(R.id.farmer);
         r2 = (RadioButton) findViewById(R.id.supplier);
@@ -77,16 +78,17 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 radioSelected= (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                String username,usertype,email,pass;
+                String username,usertype,email,mobile,pass;
                 if(radioSelected==r1)
                     usertype="Farmer";
                 else
                     usertype="Supplier";
                 username=e1.getText().toString();
                 email=e2.getText().toString();
-                pass=e3.getText().toString();
+                mobile=e3.getText().toString();
+                pass=e4.getText().toString();
                 if(username.isEmpty()){
-                    e1.setError("Please enter your full name");
+                    e1.setError("Please enter your Full name");
                     e1.requestFocus();
                 }
                 else if(email.isEmpty()){
@@ -97,19 +99,27 @@ public class RegisterActivity extends AppCompatActivity {
                     e2.setError("Please enter valid EmailId");
                     e2.requestFocus();
                 }
-                else if(pass.isEmpty()){
-                    e3.setError("Please enter password");
+                else if(mobile.isEmpty()){
+                    e3.setError("Please enter Mobile no.");
                     e3.requestFocus();
                 }
-                else if(username.isEmpty()&&email.isEmpty()&&pass.isEmpty()){
+                else if(mobile.length()!=10){
+                    e3.setError("Please enter valid Mobile no.");
+                    e3.requestFocus();
+                }
+                else if(pass.isEmpty()){
+                    e4.setError("Please enter Password");
+                    e4.requestFocus();
+                }
+                else if(username.isEmpty()&&email.isEmpty()&&mobile.isEmpty()&&pass.isEmpty()){
                     Toast.makeText(RegisterActivity.this,"Fields are empty!",Toast.LENGTH_SHORT).show();
                 }
-                else if(!(username.isEmpty()&&email.isEmpty()&&pass.isEmpty())){
+                else if(!(username.isEmpty()&&email.isEmpty()&&mobile.isEmpty()&&pass.isEmpty())){
                     progressBar.setVisibility(View.VISIBLE);
                     mAuth.createUserWithEmailAndPassword(email,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Member member=new Member(username,email,usertype);
+                            Member member=new Member(username,email,mobile,usertype);
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(member).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
