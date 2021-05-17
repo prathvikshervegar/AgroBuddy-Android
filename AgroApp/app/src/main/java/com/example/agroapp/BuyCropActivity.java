@@ -1,13 +1,17 @@
 package com.example.agroapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,19 +26,21 @@ import java.util.ArrayList;
 
 public class BuyCropActivity extends AppCompatActivity {
 
-    private Spinner s1;
+    private AutoCompleteTextView s1;
     private RecyclerView r1;
 
+    private ArrayAdapter arrayAdapter;
+
     private DatabaseReference dbRef;
-    BuyCropAdapter adapter;
-    ArrayList<CropBuy> list;
+    private BuyCropAdapter adapter;
+    private ArrayList<CropBuy> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_crop);
 
-        s1 = (Spinner) findViewById(R.id.buycropspinner);
+        s1 = (AutoCompleteTextView) findViewById(R.id.buycropspinner);
         r1 = (RecyclerView) findViewById(R.id.buycroplist);
         dbRef = FirebaseDatabase.getInstance().getReference("Crops");
 
@@ -45,9 +51,9 @@ public class BuyCropActivity extends AppCompatActivity {
         adapter = new BuyCropAdapter(this,list);
         r1.setAdapter(adapter);
 
-        s1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        s1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -61,7 +67,7 @@ public class BuyCropActivity extends AppCompatActivity {
                             String cropname = dataSnapshot.child("cropname").getValue(String.class);
                             String quantity = dataSnapshot.child("availablequantity").getValue(String.class);
                             String price = dataSnapshot.child("price").getValue(String.class);
-                            if(croptype.equals(parent.getItemAtPosition(position).toString()) && Integer.parseInt(quantity)>0) {
+                            if(croptype.equals(arrayAdapter.getItem(position)) && Integer.parseInt(quantity)>0) {
                                 CropBuy crop = new CropBuy(cropname, quantity, price, cropid, farmername,farmermobile,farmerid);
                                 list.add(crop);
                             }
@@ -75,11 +81,14 @@ public class BuyCropActivity extends AppCompatActivity {
                     }
                 });
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                ///
-            }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        arrayAdapter = new ArrayAdapter(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
+        s1.setAdapter(arrayAdapter);
+    }
+
 }

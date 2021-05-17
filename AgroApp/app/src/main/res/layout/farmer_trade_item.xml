@@ -31,7 +31,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/buycropname"
+                android:id="@+id/ftcn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -50,13 +50,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quantity available:"
+                android:text="Quantity bought:"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/buycropquantity"
+                android:id="@+id/ftq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -83,7 +83,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cost(per kg):"
+                android:text="Amount:"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -97,7 +97,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/buycropprice"
+                android:id="@+id/ftp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -115,13 +115,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Seller Name:"
+                android:text="Buyer Contact:"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/buycropcontact"
+                android:id="@+id/ftb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -131,15 +131,30 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Purchase date:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/ftd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buycropbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_gravity="right|center"
-        android:text="Buy"
-        android:textSize="16sp"/>
 
 </androidx.cardview.widget.CardView>

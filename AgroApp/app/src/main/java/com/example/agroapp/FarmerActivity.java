@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -77,7 +78,7 @@ public class FarmerActivity extends AppCompatActivity {
         l4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FarmerActivity.this,FarmerHelplineActivity.class));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://raitamitra.karnataka.gov.in/english")));
             }
         });
 

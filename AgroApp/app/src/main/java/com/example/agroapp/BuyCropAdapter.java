@@ -1,5 +1,6 @@
 package com.example.agroapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -86,11 +87,15 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                             edt.setError("Quantity cannot be empty");
                             edt.requestFocus();
                         }
+                        else if(Integer.parseInt(qty)<=0){
+                            edt.setError("Quantity must be greater than zero");
+                            edt.requestFocus();
+                        }
                         else if(Integer.parseInt(qty)>Integer.parseInt(crop.getQuantity())){
                             edt.setError("Please check available quantity");
                             edt.requestFocus();
                         }
-                        else{
+                        else if(!(Integer.parseInt(qty)<=0&&Integer.parseInt(qty)>Integer.parseInt(crop.getQuantity()))){
 
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
@@ -111,10 +116,14 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                                     dbRef.push().setValue(cropTrade);
                                     buyalert.dismiss();
 
-                                    Toast.makeText(v.getContext(),qty+" quintal of "+crop.getCropname()+" is purchased\nPlease contact seller.",Toast.LENGTH_SHORT).show();
-                                    context.startActivity(new Intent(context,SupplierTradeActivity.class));
+                                    Toast.makeText(context,qty+" quintal of "+crop.getCropname()+" is purchased\nPlease contact the seller",Toast.LENGTH_SHORT).show();
+                                    context.startActivity(new Intent(context,SupplierActivity.class));
+                                    ((Activity) context).finish();
                                 }
                             });
+                        }
+                        else {
+                            Toast.makeText(context,"Error Occurred!",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

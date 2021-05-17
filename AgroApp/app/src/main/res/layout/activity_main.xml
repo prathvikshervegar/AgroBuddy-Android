@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         app:hintEnabled="false"
+        style="@style/Widget.Design.TextInputLayout"
         app:layout_constraintEnd_toEndOf="@+id/loginemail"
         app:layout_constraintStart_toStartOf="@+id/loginemail"
         app:layout_constraintTop_toBottomOf="@+id/loginemail"
