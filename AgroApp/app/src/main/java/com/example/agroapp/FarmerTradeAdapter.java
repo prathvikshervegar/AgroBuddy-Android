@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FarmerTradeAdapter extends RecyclerView.Adapter<FarmerTradeAdapter.MyViewHolder>{
 
@@ -30,7 +31,7 @@ public class FarmerTradeAdapter extends RecyclerView.Adapter<FarmerTradeAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        CropTrade crop = list.get(position);
+        CropTrade crop = list.get(getItemCount()-position-1);
         holder.t1.setText(crop.getCropname());
         holder.t2.setText(crop.getQuantity());
         holder.t3.setText(crop.getAmount());

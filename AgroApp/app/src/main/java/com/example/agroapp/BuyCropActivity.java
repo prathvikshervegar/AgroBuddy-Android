@@ -29,7 +29,7 @@ public class BuyCropActivity extends AppCompatActivity {
     private AutoCompleteTextView s1;
     private RecyclerView r1;
 
-    private ArrayAdapter arrayAdapter;
+    private ArrayAdapter<String> arrayAdapter;
 
     private DatabaseReference dbRef;
     private BuyCropAdapter adapter;
@@ -67,8 +67,9 @@ public class BuyCropActivity extends AppCompatActivity {
                             String cropname = dataSnapshot.child("cropname").getValue(String.class);
                             String quantity = dataSnapshot.child("availablequantity").getValue(String.class);
                             String price = dataSnapshot.child("price").getValue(String.class);
-                            if(croptype.equals(arrayAdapter.getItem(position)) && Integer.parseInt(quantity)>0) {
-                                CropBuy crop = new CropBuy(cropname, quantity, price, cropid, farmername,farmermobile,farmerid);
+                            String listdate = dataSnapshot.child("selldate").getValue(String.class);
+                            if(croptype.equals(arrayAdapter.getItem(position)) && Float.parseFloat(quantity)>0) {
+                                CropBuy crop = new CropBuy(cropname, quantity, price, cropid, farmername,farmermobile,farmerid,listdate);
                                 list.add(crop);
                             }
                         }
@@ -87,7 +88,7 @@ public class BuyCropActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        arrayAdapter = new ArrayAdapter(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
+        arrayAdapter = new ArrayAdapter<>(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
         s1.setAdapter(arrayAdapter);
     }
 

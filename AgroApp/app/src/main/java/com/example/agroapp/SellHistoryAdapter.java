@@ -36,7 +36,7 @@ public class SellHistoryAdapter extends RecyclerView.Adapter<SellHistoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        SellHistory crop = list.get(position);
+        SellHistory crop = list.get(getItemCount()-position-1);
         holder.t1.setText(crop.getCropname());
         holder.t2.setText(crop.getQuantity());
         holder.t3.setText(crop.getPrice());

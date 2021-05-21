@@ -57,32 +57,44 @@
         app:layout_constraintStart_toStartOf="@+id/registeruser"
         app:layout_constraintTop_toBottomOf="@+id/registeruser" />
 
-    <EditText
-        android:id="@+id/registermobile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/round_border"
-        android:drawableLeft="@drawable/ic_phone_android"
-        android:drawablePadding="16dp"
-        android:ems="10"
-        android:hint="Mobile no."
-        android:inputType="phone"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/registeremail"
-        app:layout_constraintStart_toStartOf="@+id/registeremail"
-        app:layout_constraintTop_toBottomOf="@+id/registeremail" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:hintEnabled="false"
+        app:startIconDrawable="@drawable/ic_phone_android"
+        app:startIconTint="@color/colorPrimary"
+        app:prefixText="+91"
+        app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
         style="@style/Widget.Design.TextInputLayout"
-        app:layout_constraintEnd_toEndOf="@+id/registermobile"
-        app:layout_constraintStart_toStartOf="@+id/registermobile"
-        app:layout_constraintTop_toBottomOf="@+id/registermobile"
+        app:layout_constraintEnd_toEndOf="@+id/registeremail"
+        app:layout_constraintStart_toStartOf="@+id/registeremail"
+        app:layout_constraintTop_toBottomOf="@+id/registeremail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registermobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:drawablePadding="4dp"
+            android:hint="Mobile no."
+            android:inputType="number"
+            android:maxLength="10"
+            android:padding="16dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:hintEnabled="false"
+        style="@style/Widget.Design.TextInputLayout"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -130,9 +142,9 @@
         android:layout_marginTop="24dp"
         android:orientation="horizontal"
         android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <RadioButton
             android:id="@+id/farmer"

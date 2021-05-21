@@ -1,6 +1,7 @@
 package com.example.agroapp;
 
 public class CropSell {
+
     private String cropname;
     private String croptype;
     private String totalquantity;

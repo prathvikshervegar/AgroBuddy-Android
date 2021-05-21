@@ -1,5 +1,6 @@
 package com.example.agroapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,10 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +29,7 @@ public class SellCropActivity extends AppCompatActivity {
 
     private EditText e1, e2, e3;
     private AutoCompleteTextView sp;
-    private ArrayAdapter arrayAdapter;
+    private ArrayAdapter<String> arrayAdapter;
     private Button submit;
 
     private DatabaseReference dbRef;
@@ -73,7 +73,7 @@ public class SellCropActivity extends AppCompatActivity {
                             e2.setError("Quantity cannot be empty");
                             e2.requestFocus();
                         }
-                        else if(Integer.parseInt(quantity)<=0){
+                        else if(Float.parseFloat(quantity)<=0){
                             e2.setError("Quantity must be greater than zero");
                             e2.requestFocus();
                         }
@@ -84,7 +84,7 @@ public class SellCropActivity extends AppCompatActivity {
                         else if(cropname.isEmpty()&&quantity.isEmpty()&&price.isEmpty()){
                             Toast.makeText(SellCropActivity.this,"Fields are empty!",Toast.LENGTH_SHORT).show();
                         }
-                        else if(!(cropname.isEmpty()&&quantity.isEmpty()&&Integer.parseInt(quantity)<=0&&price.isEmpty())){
+                        else if(!(cropname.isEmpty()&&quantity.isEmpty()&&Float.parseFloat(quantity)<=0&&price.isEmpty())){
                             CropSell crop=new CropSell(cropname,croptype,quantity,quantity,price,farmername,farmermobile,farmerid,selldate);
                             dbRef.push().setValue(crop);
                             Toast.makeText(SellCropActivity.this,"Crop has been listed",Toast.LENGTH_SHORT).show();
@@ -94,6 +94,11 @@ public class SellCropActivity extends AppCompatActivity {
                         else{
                             Toast.makeText(SellCropActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SellCropActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -105,7 +110,7 @@ public class SellCropActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        arrayAdapter = new ArrayAdapter(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
+        arrayAdapter = new ArrayAdapter<>(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
         sp.setText(arrayAdapter.getItem(0).toString(),false);
         sp.setAdapter(arrayAdapter);
     }

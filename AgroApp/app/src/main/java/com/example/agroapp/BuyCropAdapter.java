@@ -2,9 +2,12 @@ package com.example.agroapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,11 +53,12 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        CropBuy crop = list.get(position);
+        CropBuy crop = list.get(getItemCount()-position-1);
         holder.t1.setText(crop.getCropname());
         holder.t2.setText(crop.getQuantity());
         holder.t3.setText(crop.getPrice());
         holder.t4.setText(crop.getFarmername());
+        holder.t5.setText(crop.getSelldate());
         holder.buybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +66,7 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                 edt.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 AlertDialog.Builder buyalertbuilder = new AlertDialog.Builder(v.getContext());
                 buyalertbuilder.setCancelable(false)
-                        .setTitle("Buy Crop")
+                        .setTitle("Buy "+crop.getCropname())
                         .setMessage("Enter the quantity:")
                         .setView(edt)
                         .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
@@ -87,24 +91,24 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                             edt.setError("Quantity cannot be empty");
                             edt.requestFocus();
                         }
-                        else if(Integer.parseInt(qty)<=0){
+                        else if(Float.parseFloat(qty)<=0){
                             edt.setError("Quantity must be greater than zero");
                             edt.requestFocus();
                         }
-                        else if(Integer.parseInt(qty)>Integer.parseInt(crop.getQuantity())){
+                        else if(Float.parseFloat(qty)>Float.parseFloat(crop.getQuantity())){
                             edt.setError("Please check available quantity");
                             edt.requestFocus();
                         }
-                        else if(!(Integer.parseInt(qty)<=0&&Integer.parseInt(qty)>Integer.parseInt(crop.getQuantity()))){
+                        else if(!(Float.parseFloat(qty)<=0&&Float.parseFloat(qty)>Float.parseFloat(crop.getQuantity()))){
 
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot) {
-                                    String newqty = String.valueOf(Integer.parseInt(crop.getQuantity()) - Integer.parseInt(qty));
+                                    String newqty = String.valueOf(Float.parseFloat(crop.getQuantity()) - Float.parseFloat(qty));
                                     FirebaseDatabase.getInstance().getReference("Crops").child(crop.getCropid()).child("availablequantity").setValue(newqty);
 
                                     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Trades");
-                                    String amount = String.valueOf(Integer.parseInt(qty)*100*Integer.parseInt(crop.getPrice()));
+                                    String amount = String.valueOf(Math.round(Float.parseFloat(qty)*100*Float.parseFloat(crop.getPrice())));
                                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                     Date date = new Date();
                                     String tradedate= dateFormat.format(date);
@@ -115,10 +119,27 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                                     CropTrade cropTrade = new CropTrade(crop.getCropname(),qty,amount,crop.getFarmername(),crop.getFarmermobile(),crop.getFarmerid(),suppliername,suppliermobile,supplierid,tradedate);
                                     dbRef.push().setValue(cropTrade);
                                     buyalert.dismiss();
+                                    //Toast.makeText(context,qty+" quintal of "+crop.getCropname()+" is purchased\nPlease contact the seller",Toast.LENGTH_SHORT).show();
+                                    successdialog();
+                                }
 
-                                    Toast.makeText(context,qty+" quintal of "+crop.getCropname()+" is purchased\nPlease contact the seller",Toast.LENGTH_SHORT).show();
-                                    context.startActivity(new Intent(context,SupplierActivity.class));
-                                    ((Activity) context).finish();
+                                private void successdialog() {
+                                    Dialog dialog = new Dialog(context);
+                                    dialog.setContentView(R.layout.success_alert);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    TextView t1= dialog.findViewById(R.id.alerttv2);
+                                    TextView t2= dialog.findViewById(R.id.alerttv3);
+                                    Button b1= dialog.findViewById(R.id.alertbtn);
+
+                                    t1.setText(qty+" quintal of "+crop.getCropname()+" is purchased");
+                                    t2.setText("Seller Contact:\n\n"+crop.getFarmername()+" - "+crop.getFarmermobile());
+                                    b1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
                                 }
                             });
                         }
@@ -139,7 +160,7 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView t1,t2,t3,t4;
+        TextView t1,t2,t3,t4,t5;
         Button buybtn;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -148,7 +169,10 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
             t2 = itemView.findViewById(R.id.buycropquantity);
             t3 = itemView.findViewById(R.id.buycropprice);
             t4 = itemView.findViewById(R.id.buycropcontact);
+            t5 = itemView.findViewById(R.id.buycropdate);
             buybtn = itemView.findViewById(R.id.buycropbtn);
+
+
         }
     }
 

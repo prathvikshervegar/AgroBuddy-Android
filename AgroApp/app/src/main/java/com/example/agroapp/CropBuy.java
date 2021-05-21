@@ -9,8 +9,9 @@ public class CropBuy {
     private String farmername;
     private String farmermobile;
     private String farmerid;
+    private String selldate;
 
-    public CropBuy(String cropname, String quantity, String price, String cropid, String farmername, String farmermobile, String farmerid) {
+    public CropBuy(String cropname, String quantity, String price, String cropid, String farmername, String farmermobile, String farmerid, String selldate) {
         this.cropname = cropname;
         this.quantity = quantity;
         this.price = price;
@@ -18,6 +19,7 @@ public class CropBuy {
         this.farmername = farmername;
         this.farmermobile = farmermobile;
         this.farmerid = farmerid;
+        this.selldate = selldate;
     }
 
     public String getCropname() {
@@ -46,5 +48,9 @@ public class CropBuy {
 
     public String getCropid() {
         return cropid;
+    }
+
+    public String getSelldate() {
+        return selldate;
     }
 }
