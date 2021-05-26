@@ -25,11 +25,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SellCropActivity extends AppCompatActivity {
+public class RequestCropActivity extends AppCompatActivity {
 
-    private EditText e1, e2, e3;
-    private AutoCompleteTextView sp1,sp2;
-    private ArrayAdapter<String> a1,a2;
+    private EditText e1, e2;
+    private AutoCompleteTextView sp1;
+    private ArrayAdapter<String> a1;
     private Button submit;
 
     private DatabaseReference dbRef;
@@ -37,16 +37,14 @@ public class SellCropActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sell_crop);
+        setContentView(R.layout.activity_request_crop);
 
-        e1 = (EditText) findViewById(R.id.sellcropname);
-        e2 = (EditText) findViewById(R.id.sellcropquantity);
-        e3 = (EditText) findViewById(R.id.sellcropprice);
-        submit = (Button) findViewById(R.id.sellcropsubmit);
-        sp1 = (AutoCompleteTextView) findViewById(R.id.sellcroptype);
-        sp2 = (AutoCompleteTextView) findViewById(R.id.sellcropunit);
+        e1 = (EditText) findViewById(R.id.requestcropname);
+        e2 = (EditText) findViewById(R.id.requestcropquantity);
+        submit = (Button) findViewById(R.id.requestcropsubmit);
+        sp1 = (AutoCompleteTextView) findViewById(R.id.requestcroptype);
 
-        dbRef = FirebaseDatabase.getInstance().getReference().child("Crops");
+        dbRef = FirebaseDatabase.getInstance().getReference().child("Requests");
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,19 +52,18 @@ public class SellCropActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                     @Override
                     public void onSuccess(DataSnapshot dataSnapshot) {
-                        String farmerid,farmername,farmermobile,farmeraddress,cropname,croptype,quantity,unit,price,selldate;
-                        farmerid= dataSnapshot.getKey();
-                        farmername=dataSnapshot.child("name").getValue(String.class);
-                        farmermobile=dataSnapshot.child("mobile").getValue(String.class);
-                        farmeraddress=dataSnapshot.child("address").getValue(String.class);
+                        String buyerid,buyername,buyermobile,buyeraddress,cropname,croptype,quantity,requestdate,acceptstatus;
+                        buyerid= dataSnapshot.getKey();
+                        buyername=dataSnapshot.child("name").getValue(String.class);
+                        buyermobile=dataSnapshot.child("mobile").getValue(String.class);
+                        buyeraddress=dataSnapshot.child("address").getValue(String.class);
                         cropname=e1.getText().toString();
                         croptype=sp1.getText().toString();
                         quantity=e2.getText().toString();
-                        unit=sp2.getText().toString();
-                        price=e3.getText().toString();
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         Date date = new Date();
-                        selldate= dateFormat.format(date);
+                        requestdate= dateFormat.format(date);
+                        acceptstatus= "FALSE";
 
                         if(cropname.isEmpty()){
                             e1.setError("Commodity name cannot be empty");
@@ -76,32 +73,24 @@ public class SellCropActivity extends AppCompatActivity {
                             e2.setError("Quantity cannot be empty");
                             e2.requestFocus();
                         }
-                        else if(Float.parseFloat(quantity)<=0){
-                            e2.setError("Quantity must be greater than zero");
-                            e2.requestFocus();
+                        else if(cropname.isEmpty()&&quantity.isEmpty()){
+                            Toast.makeText(RequestCropActivity.this,"Fields are empty!",Toast.LENGTH_SHORT).show();
                         }
-                        else if(price.isEmpty()){
-                            e3.setError("Cost cannot be empty");
-                            e3.requestFocus();
-                        }
-                        else if(cropname.isEmpty()&&quantity.isEmpty()&&price.isEmpty()){
-                            Toast.makeText(SellCropActivity.this,"Fields are empty!",Toast.LENGTH_SHORT).show();
-                        }
-                        else if(!(cropname.isEmpty()&&quantity.isEmpty()&&Float.parseFloat(quantity)<=0&&price.isEmpty())){
-                            CropSell crop=new CropSell(cropname,croptype,quantity,quantity,unit,price,farmername,farmermobile,farmeraddress,farmerid,selldate);
+                        else if(!(cropname.isEmpty()&&quantity.isEmpty())){
+                            CropRequest crop=new CropRequest(cropname,croptype,quantity,buyername,buyermobile,buyeraddress,buyerid,requestdate,acceptstatus);
                             dbRef.push().setValue(crop);
-                            Toast.makeText(SellCropActivity.this,"Crop has been listed",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SellCropActivity.this,SellCropActivity.class));
+                            Toast.makeText(RequestCropActivity.this,"Request successful",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RequestCropActivity.this,RequestCropActivity.class));
                             finish();
                         }
                         else{
-                            Toast.makeText(SellCropActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RequestCropActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SellCropActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RequestCropActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -117,9 +106,5 @@ public class SellCropActivity extends AppCompatActivity {
         a1 = new ArrayAdapter<>(this,R.layout.dropdown_item,getResources().getStringArray(R.array.crop_type));
         sp1.setText(a1.getItem(0).toString(),false);
         sp1.setAdapter(a1);
-
-        a2 = new ArrayAdapter<>(this,R.layout.dropdown_item,getResources().getStringArray(R.array.unit));
-        sp2.setText(a2.getItem(0).toString(),false);
-        sp2.setAdapter(a2);
     }
 }

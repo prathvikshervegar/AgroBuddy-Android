@@ -6,20 +6,24 @@ public class CropSell {
     private String croptype;
     private String totalquantity;
     private String availablequantity;
+    private String unit;
     private String price;
     private String farmername;
     private String farmermobile;
+    private String farmeraddress;
     private String farmerid;
     private String selldate;
 
-    public CropSell(String cropname, String croptype, String totalquantity, String availablequantity, String price, String farmername, String farmermobile, String farmerid, String selldate) {
+    public CropSell(String cropname, String croptype, String totalquantity, String availablequantity, String unit, String price, String farmername, String farmermobile, String farmeraddress, String farmerid, String selldate) {
         this.cropname = cropname;
         this.croptype = croptype;
         this.totalquantity = totalquantity;
         this.availablequantity = availablequantity;
+        this.unit = unit;
         this.price = price;
         this.farmername = farmername;
         this.farmermobile = farmermobile;
+        this.farmeraddress = farmeraddress;
         this.farmerid = farmerid;
         this.selldate = selldate;
     }
@@ -40,6 +44,10 @@ public class CropSell {
         return availablequantity;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
     public String getPrice() {
         return price;
     }
@@ -50,6 +58,10 @@ public class CropSell {
 
     public String getFarmermobile() {
         return farmermobile;
+    }
+
+    public String getFarmeraddress() {
+        return farmeraddress;
     }
 
     public String getFarmerid() {

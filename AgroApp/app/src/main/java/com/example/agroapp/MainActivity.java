@@ -63,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         newUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i1=new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(i1);
+                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
                 finish();
             }
         });
@@ -102,12 +101,15 @@ public class MainActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(MainActivity.this,"Logged in successfully",Toast.LENGTH_SHORT).show();
                                     String usertype=dataSnapshot.child("usertype").getValue(String.class);
-                                    if(usertype.equals("Farmer"))
+                                    if(usertype.equals("FARMER"))
                                     {
                                         startActivity(new Intent(MainActivity.this,FarmerActivity.class));
                                     }
-                                    else{
+                                    else if(usertype.equals("BUYERCOMMERCIAL")){
                                         startActivity(new Intent(MainActivity.this, SupplierActivity.class));
+                                    }
+                                    else {
+                                        startActivity(new Intent(MainActivity.this, NonSupplierActivity.class));
                                     }
                                     finish();
                                 }

@@ -47,16 +47,18 @@ public class SupplierTradeActivity extends AppCompatActivity {
                     String farmerid = dataSnapshot.child("farmerid").getValue(String.class);
                     String farmername = dataSnapshot.child("farmername").getValue(String.class);
                     String farmermobile = dataSnapshot.child("farmermobile").getValue(String.class);
+                    String farmeraddress = dataSnapshot.child("farmeraddress").getValue(String.class);
                     String supplierid = dataSnapshot.child("supplierid").getValue(String.class);
                     String suppliername = dataSnapshot.child("suppliername").getValue(String.class);
                     String suppliermobile = dataSnapshot.child("suppliermobile").getValue(String.class);
+                    String supplieraddress = dataSnapshot.child("supplieraddress").getValue(String.class);
                     String cropname = dataSnapshot.child("cropname").getValue(String.class);
                     String quantity = dataSnapshot.child("quantity").getValue(String.class);
                     String price = dataSnapshot.child("amount").getValue(String.class);
                     String date = dataSnapshot.child("tradedate").getValue(String.class);
 
                     if(supplierid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        CropTrade crop = new CropTrade(cropname, quantity, price, farmername,farmermobile,farmerid,suppliername,suppliermobile,supplierid,date);
+                        CropTrade crop = new CropTrade(cropname, quantity, price, farmername,farmermobile,farmeraddress,farmerid,suppliername,suppliermobile,supplieraddress,supplierid,date);
                         list.add(crop);
                     }
                 }

@@ -8,6 +8,10 @@
     <string name="forgot_password">FORGOT PASSWORD?</string>
     <string name="new_user_register_now">New User? Register Here</string>
     <string name="existing_user_login_here">Existing User? Login Here</string>
+    <string-array name="buyer_type">
+        <item>COMMERCIAL</item>
+        <item>NON-COMMERCIAL</item>
+    </string-array>
     <string-array name="crop_type">
         <item>FOOD GRAINS/CEREALS</item>
         <item>OIL SEEDS</item>
@@ -15,5 +19,9 @@
         <item>VEGETABLES</item>
         <item>SPICES</item>
         <item>MISC</item>
+    </string-array>
+    <string-array name="unit">
+        <item>quintal</item>
+        <item>kg</item>
     </string-array>
 </resources>

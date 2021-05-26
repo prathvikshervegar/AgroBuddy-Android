@@ -37,6 +37,7 @@ public class SupplierTradeAdapter extends RecyclerView.Adapter<SupplierTradeAdap
         holder.t3.setText(crop.getAmount());
         holder.t4.setText(crop.getFarmername()+" - "+crop.getFarmermobile());
         holder.t5.setText(crop.getTradedate());
+        holder.t6.setText(crop.getFarmeraddress());
     }
 
     @Override
@@ -46,7 +47,7 @@ public class SupplierTradeAdapter extends RecyclerView.Adapter<SupplierTradeAdap
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView t1,t2,t3,t4,t5;
+        TextView t1,t2,t3,t4,t5,t6;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +56,7 @@ public class SupplierTradeAdapter extends RecyclerView.Adapter<SupplierTradeAdap
             t3=itemView.findViewById(R.id.stp);
             t4=itemView.findViewById(R.id.stc);
             t5=itemView.findViewById(R.id.std);
+            t6=itemView.findViewById(R.id.stadr);
         }
     }
 }

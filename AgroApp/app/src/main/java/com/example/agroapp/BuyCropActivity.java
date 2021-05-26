@@ -64,12 +64,14 @@ public class BuyCropActivity extends AppCompatActivity {
                             String farmerid = dataSnapshot.child("farmerid").getValue(String.class);
                             String farmername = dataSnapshot.child("farmername").getValue(String.class);
                             String farmermobile = dataSnapshot.child("farmermobile").getValue(String.class);
+                            String farmeraddress = dataSnapshot.child("farmeraddress").getValue(String.class);
                             String cropname = dataSnapshot.child("cropname").getValue(String.class);
                             String quantity = dataSnapshot.child("availablequantity").getValue(String.class);
+                            String unit = dataSnapshot.child("unit").getValue(String.class);
                             String price = dataSnapshot.child("price").getValue(String.class);
                             String listdate = dataSnapshot.child("selldate").getValue(String.class);
                             if(croptype.equals(arrayAdapter.getItem(position)) && Float.parseFloat(quantity)>0) {
-                                CropBuy crop = new CropBuy(cropname, quantity, price, cropid, farmername,farmermobile,farmerid,listdate);
+                                CropBuy crop = new CropBuy(cropname, quantity, unit, price, cropid, farmername,farmermobile,farmeraddress,farmerid,listdate);
                                 list.add(crop);
                             }
                         }

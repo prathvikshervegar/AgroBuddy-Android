@@ -1,11 +1,9 @@
 package com.example.agroapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.InputType;
@@ -23,23 +21,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
-public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHolder> {
+public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.MyViewHolder> {
 
     Context context;
-    ArrayList<CropBuy> list;
+    ArrayList<CropAccept> list;
 
-    public BuyCropAdapter(Context context, ArrayList<CropBuy> list) {
+    public RequestListAdapter(Context context, ArrayList<CropAccept> list) {
         this.context = context;
         this.list = list;
     }
@@ -47,27 +42,27 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.buy_crop_item,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.request_crop_item,parent,false);
         return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        CropBuy crop = list.get(getItemCount()-position-1);
+        CropAccept crop = list.get(getItemCount()-position-1);
         holder.t1.setText(crop.getCropname());
-        holder.t2.setText(crop.getQuantity()+" "+crop.getUnit());
-        holder.t3.setText(crop.getPrice());
-        holder.t4.setText(crop.getFarmername());
-        holder.t5.setText(crop.getSelldate());
-        holder.buybtn.setOnClickListener(new View.OnClickListener() {
+        holder.t2.setText(crop.getCroptype());
+        holder.t3.setText(crop.getQuantity());
+        holder.t4.setText(crop.getBuyername());
+        holder.t5.setText(crop.getRequestdate());
+        holder.acceptbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText edt = new EditText(v.getContext());
                 edt.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                AlertDialog.Builder buyalertbuilder = new AlertDialog.Builder(v.getContext());
-                buyalertbuilder.setCancelable(false)
-                        .setTitle("Buy "+crop.getCropname())
-                        .setMessage("Enter the quantity (in "+crop.getUnit()+"):")
+                AlertDialog.Builder requestalertbuilder = new AlertDialog.Builder(v.getContext());
+                requestalertbuilder.setCancelable(false)
+                        .setTitle("Accept "+crop.getCropname()+" Request")
+                        .setMessage("Enter the Amount (in ₹):")
                         .setView(edt)
                         .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                             @Override
@@ -81,52 +76,38 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                     }
                 });
 
-                AlertDialog buyalert= buyalertbuilder.create();
-                buyalert.show();
-                buyalert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                AlertDialog requestalert= requestalertbuilder.create();
+                requestalert.show();
+                requestalert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String qty = edt.getText().toString();
-                        if(qty.isEmpty()){
+                        String amount = edt.getText().toString();
+                        if(amount.isEmpty()){
                             edt.setError("Quantity cannot be empty");
                             edt.requestFocus();
                         }
-                        else if(Float.parseFloat(qty)<=0){
-                            edt.setError("Quantity must be greater than zero");
+                        else if(Integer.parseInt(amount)<=0){
+                            edt.setError("Amount must be greater than zero");
                             edt.requestFocus();
                         }
-                        else if(Float.parseFloat(qty)>Float.parseFloat(crop.getQuantity())){
-                            edt.setError("Please check available quantity");
-                            edt.requestFocus();
-                        }
-                        else if(!(Float.parseFloat(qty)<=0&&Float.parseFloat(qty)>Float.parseFloat(crop.getQuantity()))){
-
+                        else if(!(amount.isEmpty()&&Integer.parseInt(amount)<=0)){
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot) {
-                                    String newqty = String.valueOf(Float.parseFloat(crop.getQuantity()) - Float.parseFloat(qty));
-                                    FirebaseDatabase.getInstance().getReference("Crops").child(crop.getCropid()).child("availablequantity").setValue(newqty);
+                                    FirebaseDatabase.getInstance().getReference("Requests").child(crop.getRequestid()).child("acceptstatus").setValue("TRUE");
 
                                     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Trades");
-                                    String amount="";
-                                    if(crop.getUnit().equals("quintal"))
-                                        amount = String.valueOf(Math.round(Float.parseFloat(qty)*Float.parseFloat(crop.getPrice())*100));
-                                    else if(crop.getUnit().equals("kg"))
-                                        amount = String.valueOf(Math.round(Float.parseFloat(qty)*Float.parseFloat(crop.getPrice())));
-                                    else
-                                        Toast.makeText(context, "Error in units", Toast.LENGTH_SHORT).show();
+
                                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                     Date date = new Date();
                                     String tradedate= dateFormat.format(date);
-                                    String supplierid= dataSnapshot.getKey();
-                                    String suppliername= dataSnapshot.child("name").getValue(String.class);
-                                    String suppliermobile= dataSnapshot.child("mobile").getValue(String.class);
-                                    String supplieraddress= dataSnapshot.child("address").getValue(String.class);
-
-                                    CropTrade cropTrade = new CropTrade(crop.getCropname(),qty+" "+crop.getUnit(),amount,crop.getFarmername(),crop.getFarmermobile(),crop.getFarmeraddress(),crop.getFarmerid(),suppliername,suppliermobile,supplieraddress,supplierid,tradedate);
+                                    String farmerid= dataSnapshot.getKey();
+                                    String farmername= dataSnapshot.child("name").getValue(String.class);
+                                    String farmermobile= dataSnapshot.child("mobile").getValue(String.class);
+                                    String farmeraddress= dataSnapshot.child("address").getValue(String.class);
+                                    CropTrade cropTrade = new CropTrade(crop.getCropname(),crop.getQuantity(),amount,farmername,farmermobile,farmeraddress,farmerid,crop.getBuyername(),crop.getBuyermobile(),crop.getBuyeraddress(),crop.getBuyerid(),tradedate);
                                     dbRef.push().setValue(cropTrade);
-                                    buyalert.dismiss();
-                                    //Toast.makeText(context,qty+" quintal of "+crop.getCropname()+" is purchased\nPlease contact the seller",Toast.LENGTH_SHORT).show();
+                                    requestalert.dismiss();
                                     successdialog();
                                 }
 
@@ -143,6 +124,7 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
                                     });
                                     dialog.show();
                                 }
+
                             });
                         }
                         else {
@@ -154,7 +136,6 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
         });
     }
 
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -163,18 +144,16 @@ public class BuyCropAdapter extends RecyclerView.Adapter<BuyCropAdapter.MyViewHo
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView t1,t2,t3,t4,t5;
-        Button buybtn;
+        Button acceptbtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            t1 = itemView.findViewById(R.id.buycropname);
-            t2 = itemView.findViewById(R.id.buycropquantity);
-            t3 = itemView.findViewById(R.id.buycropprice);
-            t4 = itemView.findViewById(R.id.buycropcontact);
-            t5 = itemView.findViewById(R.id.buycropdate);
-            buybtn = itemView.findViewById(R.id.buycropbtn);
-
-
+            t1=itemView.findViewById(R.id.requestcropname1);
+            t2=itemView.findViewById(R.id.requestcroptype1);
+            t3=itemView.findViewById(R.id.requestcropquantity1);
+            t4=itemView.findViewById(R.id.requestbuyername);
+            t5=itemView.findViewById(R.id.requestcropdate1);
+            acceptbtn=itemView.findViewById(R.id.acceptcropbtn);
         }
     }
 

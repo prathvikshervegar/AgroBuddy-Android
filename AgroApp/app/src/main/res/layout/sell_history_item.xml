@@ -11,7 +11,7 @@
 
         <TextView
             android:id="@+id/sh1"
-            android:layout_width="85dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@android:color/black"

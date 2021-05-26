@@ -16,27 +16,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class FarmerTradeActivity extends AppCompatActivity {
+public class NonSupplierTradeActivity extends AppCompatActivity {
 
     RecyclerView r1;
 
     private DatabaseReference dbRef;
-    private FarmerTradeAdapter adapter;
+    private SupplierTradeAdapter adapter;
     private ArrayList<CropTrade> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_farmer_trade);
+        setContentView(R.layout.activity_non_supplier_trade);
 
-        r1 = (RecyclerView) findViewById(R.id.ftr);
+        r1 = (RecyclerView) findViewById(R.id.nstr);
         dbRef = FirebaseDatabase.getInstance().getReference("Trades");
 
         r1.setHasFixedSize(true);
         r1.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
-        adapter = new FarmerTradeAdapter(this,list);
+        adapter = new SupplierTradeAdapter(this,list);
         r1.setAdapter(adapter);
 
         dbRef.addValueEventListener(new ValueEventListener() {
@@ -57,7 +57,7 @@ public class FarmerTradeActivity extends AppCompatActivity {
                     String price = dataSnapshot.child("amount").getValue(String.class);
                     String date = dataSnapshot.child("tradedate").getValue(String.class);
 
-                    if(farmerid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    if(supplierid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         CropTrade crop = new CropTrade(cropname, quantity, price, farmername,farmermobile,farmeraddress,farmerid,suppliername,suppliermobile,supplieraddress,supplierid,date);
                         list.add(crop);
                     }
@@ -67,7 +67,7 @@ public class FarmerTradeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                ///
+
             }
         });
     }

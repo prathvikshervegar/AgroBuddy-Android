@@ -49,7 +49,7 @@ public class SellHistoryActivity extends AppCompatActivity {
                     String fid = dataSnapshot.child("farmerid").getValue(String.class);
                     String cropname = dataSnapshot.child("cropname").getValue(String.class);
                     String selldate = dataSnapshot.child("selldate").getValue(String.class);
-                    String quantity = dataSnapshot.child("totalquantity").getValue(String.class);
+                    String quantity = dataSnapshot.child("totalquantity").getValue(String.class)+" "+dataSnapshot.child("unit").getValue(String.class);
                     String price = dataSnapshot.child("price").getValue(String.class);
                     if(fid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         SellHistory crop = new SellHistory(cropname, quantity, price, selldate);

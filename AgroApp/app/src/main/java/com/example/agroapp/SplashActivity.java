@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DataSnapshot dataSnapshot) {
                     String usertype=dataSnapshot.child("usertype").getValue(String.class);
-                    if(usertype.equals("Farmer")) {
+                    if(usertype.equals("FARMER")) {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -41,11 +41,20 @@ public class SplashActivity extends AppCompatActivity {
                             }
                         },3000);
                     }
-                    else{
+                    else if(usertype.equals("BUYERCOMMERCIAL")){
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 startActivity(new Intent(SplashActivity.this, SupplierActivity.class));
+                                finish();
+                            }
+                        },3000);
+                    }
+                    else {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(SplashActivity.this, NonSupplierActivity.class));
                                 finish();
                             }
                         },3000);
