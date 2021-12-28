@@ -99,7 +99,11 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                         t3.setText(String.valueOf(total));
                         t4.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                        t5.setText("Spendings");
+                        if(uid.equals("farmerid") {
+                            t5.setText("Earnings");
+                        } else {
+                            t5.setText("Spendings");
+                        }
                         t6.setText("Total Trades");
                         t7.setText("₹");
                         s1.stopShimmer();
