@@ -1,5 +1,3 @@
-# MAD-project
-
 # AGRO BUDDY
  An Android app for farmers and suppliers to interact and trade crops online.
  
